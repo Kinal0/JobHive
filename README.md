@@ -1,4 +1,4 @@
-# JobHive (Team 8)
+# JobHive
 
 ## Project Overview
 
@@ -11,12 +11,6 @@ The primary goal of JobHive is to provide users with the following features:
 * Job Search: Jobseekers can search for jobs using various filters like location, company, skills.
 
 * Job Applications : Jobseekers can also apply to the jobs posted by recruiters making it easy for the recruiters to source talent. 
-
-## Team Members
-
-* Kinal Mangukiya : Team Lead
-* Christopher Johnson: Developer
-* Jack Berry: Developer
 
 
 ## Tech Stack:
