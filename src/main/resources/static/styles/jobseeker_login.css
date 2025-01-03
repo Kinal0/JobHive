@@ -1,0 +1,22 @@
+body {
+    background: linear-gradient(to right, lightgreen, lightskyblue);
+    margin: auto;
+    width: 50%;
+    margin-top: 100px;
+    padding: 10px;
+}
+div {
+    border-style: solid;
+    border-color: #333333;
+    background: #EEF2D6;
+    padding: 10px;
+
+}
+p, h1, input, button{
+    text-align: center;
+    font-family: "monospace", "Lucida Bright";
+    color: #333333;
+}
+button, input {
+    background-color: white;
+}

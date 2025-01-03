@@ -1,0 +1,155 @@
+
+
+drop table users_roles;
+drop table user;
+drop table role;
+drop table application;
+drop table job;
+drop table company;
+drop table skill;
+
+insert into Role (name) values ("RECRUITER"), ("JOBSEEKER");
+
+CREATE TABLE `user` (
+  `user_id` bigint NOT NULL AUTO_INCREMENT,
+  `user_name` varchar(255) DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `security_question1` varchar(255) DEFAULT NULL,
+  `security_answer1` varchar(255) DEFAULT NULL,
+  `security_question2` varchar(255) DEFAULT NULL,
+  `security_answer2` varchar(255) DEFAULT NULL,
+  `skills` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `user_name` (`user_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `role` (
+  `role_id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`role_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `users_roles` (
+  `user_id` bigint NOT NULL,
+  `role_id` bigint NOT NULL,
+  KEY `user_fk_idx` (`user_id`),
+  KEY `role_fk_idx` (`role_id`),
+  CONSTRAINT `role_fk` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`),
+  CONSTRAINT `user_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+CREATE TABLE `skill` (
+  `skill_id` bigint NOT NULL AUTO_INCREMENT,
+  `skill_title` varchar(255) DEFAULT NULL,
+  `skill_description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`skill_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `company` (
+  `company_id` bigint NOT NULL AUTO_INCREMENT,
+  `company_name` varchar(255) DEFAULT NULL,
+  `company_description` varchar(255) DEFAULT NULL,
+  `company_state` varchar(255) DEFAULT NULL,
+  `company_city` varchar(255) DEFAULT NULL,
+  `company_address` varchar(255) DEFAULT NULL,
+  `company_contact` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`company_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `job` (
+  `job_id` bigint NOT NULL AUTO_INCREMENT,
+  `job_title` varchar(255) DEFAULT NULL,
+  `job_description` varchar(255) DEFAULT NULL,
+  `job_city` varchar(255) DEFAULT NULL,
+  `job_state` varchar(255) DEFAULT NULL,
+  `company_id` bigint NOT NULL,
+  `skilllist` varchar(255) DEFAULT NULL,
+  `job_type` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`job_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+CREATE TABLE `application` (
+  `application_id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` bigint NOT NULL,
+  `job_id` bigint NOT NULL,
+  `application_date` datetime NOT NULL,
+  `comments` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `job_skills` varchar(255) DEFAULT NULL,
+  `last_seen` datetime(6) DEFAULT NULL,
+  `user_skills` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`application_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+INSERT INTO Skill (skill_title, skill_description) VALUES
+('C#', 'A modern, object-oriented programming language developed by Microsoft.'),
+('PHP', 'A popular general-purpose scripting language that is especially suited to web development.'),
+('Ruby', 'A dynamic, open source programming language with a focus on simplicity and productivity.'),
+('Swift', 'A powerful and intuitive programming language for macOS, iOS, watchOS, and tvOS.'),
+('Kotlin', 'A statically typed, cross-platform, general-purpose programming language with type inference.'),
+('HTML', 'The standard markup language for documents designed to be displayed in a web browser.'),
+('CSS', 'A style sheet language used for describing the presentation of a document written in a markup language like HTML.'),
+('TypeScript', 'A strict syntactical superset of JavaScript and adds optional static typing to the language.'),
+('C++', 'A general-purpose programming language created as an extension of the C programming language.'),
+('Go', 'A statically typed, compiled programming language designed at Google.'),
+('R', 'A programming language and free software environment for statistical computing and graphics.'),
+('Perl', 'A family of two high-level, general-purpose, interpreted, dynamic programming languages.'),
+('Scala', 'A strong static type general-purpose programming language that supports both object-oriented programming and functional programming.'),
+('Rust', 'A multi-paradigm programming language focused on performance and safety, especially safe concurrency.'),
+('Objective-C', 'A general-purpose, object-oriented programming language that adds Smalltalk-style messaging to the C programming language.'),
+('Shell Scripting', 'A script written for the shell, or command line interpreter, of an operating system.'),
+('PowerShell', 'A task automation and configuration management framework from Microsoft.'),
+('MATLAB', 'A programming platform designed specifically for engineers and scientists.'),
+('SAS', 'A software suite used for advanced analytics, multivariate analysis, business intelligence, and data management.'),
+('VBA', 'An event-driven programming language from Microsoft that is primarily used with Microsoft Office applications.'),
+('Groovy', 'An object-oriented programming language for the Java platform.'),
+('Lua', 'A lightweight, high-level, multi-paradigm programming language designed primarily for embedded use in applications.'),
+('Haskell', 'A general-purpose, statically typed, purely functional programming language with type inference and lazy evaluation.'),
+('Erlang', 'A general-purpose, concurrent, garbage-collected programming language and runtime system.'),
+('Clojure', 'A modern, dynamic, and functional dialect of the Lisp programming language on the Java platform.'),
+('Dart', 'An open-source, general-purpose programming language originally developed by Google.');
+
+INSERT INTO Company (company_name, company_description, company_state, company_city, company_address, company_contact) VALUES
+('Microsoft', 'Multinational Technology Company', 'Washington', 'Redmond', 'One Microsoft Way', '4258828080'),
+('Google', 'Multinational Technology Company', 'California', 'Mountain View', '1600 Amphitheatre Parkway', '6502530000'),
+('Apple', 'Multinational Technology Company', 'California', 'Cupertino', 'One Apple Park Way', '4089961010'),
+('Facebook', 'Social Media Company', 'California', 'Menlo Park', '1 Hacker Way', '6505434800'),
+('Tesla', 'Automotive and Energy Company', 'California', 'Palo Alto', '3500 Deer Creek Road', '6506815000'),
+('IBM', 'Multinational Technology Company', 'New York', 'Armonk', '1 New Orchard Road', '9144991900'),
+('Intel', 'Multinational Technology Company', 'California', 'Santa Clara', '2200 Mission College Blvd', '4087658080'),
+('Cisco', 'Networking Hardware Company', 'California', 'San Jose', '170 West Tasman Drive', '4085264000'),
+('Oracle', 'Multinational Technology Company', 'California', 'Redwood City', '500 Oracle Parkway', '6505067000'),
+('Samsung', 'Multinational Conglomerate Company', 'Suwon', 'South Korea', '129 Samsung-ro', '82312221114'),
+('Sony', 'Multinational Conglomerate Company', 'Tokyo', 'Minato', '1-7-1 Konan', '81367485000'),
+('LG', 'Multinational Conglomerate Company', 'Seoul', 'South Korea', 'LG Twin Towers', '82237777114'),
+('HP', 'Multinational Technology Company', 'California', 'Palo Alto', '1501 Page Mill Road', '6508571501'),
+('Dell', 'Multinational Technology Company', 'Texas', 'Round Rock', 'One Dell Way', '5123384400'),
+('Accenture', 'Professional Services Company', 'Illinois', 'Chicago', '161 N Clark St', '3126930161'),
+('Capgemini', 'Multinational Corporation', 'Paris', 'France', '11 rue de Tilsitt', '33147542000'),
+('Infosys', 'Multinational Corporation', 'Karnataka', 'Bengaluru', '44 Hosur Road', '918028520260'),
+('TCS', 'Multinational Corporation', 'Maharashtra', 'Mumbai', 'TCS House', '912266772696'),
+('Wipro', 'Multinational Corporation', 'Karnataka', 'Bengaluru', 'Doddakannelli', '918028452016'),
+('Cognizant', 'Multinational Corporation', 'New Jersey', 'Teaneck', '500 Frank W Burr Blvd', '12018838300'),
+('Goldman Sachs', 'Investment Banking Company', 'New York', 'New York', '200 West Street', '2129021000'),
+('JPMorgan Chase', 'Investment Banking Company', 'New York', 'New York', '383 Madison Ave', '2122706000'),
+('Bank of America', 'Financial Services Company', 'North Carolina', 'Charlotte', '100 N Tryon St', '9803353561'),
+('Wells Fargo', 'Financial Services Company', 'California', 'San Francisco', '420 Montgomery St', '8662493302'),
+('Citigroup', 'Financial Services Company', 'New York', 'New York', '388 Greenwich Street', '2125591000'),
+('American Express', 'Financial Services Company', 'New York', 'New York', '200 Vesey Street', '2126402000'),
+('Visa', 'Financial Services Company', 'California', 'Foster City', '900 Metro Center Blvd', '6504323200'),
+('Mastercard', 'Financial Services Company', 'New York', 'Purchase', '2000 Purchase Street', '9142492000'),
+('PayPal', 'Financial Technology Company', 'California', 'San Jose', '2211 North First Street', '4089671000'),
+('Square', 'Financial Technology Company', 'California', 'San Francisco', '1455 Market Street', '4153753176');
+
+
+
+
+
+
+

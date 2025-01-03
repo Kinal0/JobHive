@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Skill</title>
+    <style>
+        body {
+            background-image: url('/images/welcome_login_signup.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .nav-container {
+            width: 100%;
+            background-color: #007bff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 20px;
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #343a40;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group1 {
+             margin-bottom: 15px;
+             text-align: center;
+         }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea, select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ced4da;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="nav-container">
+    <a href="/" class="nav-link" style="font-weight: bold;">
+        JobHive
+        <img src="/images/jobhive.jpeg" alt="animated" style="width: 20px; height: 20px;">
+    </a>
+    <a sec:authorize="hasAuthority('RECRUITER')" class="nav-link" th:href="@{/skill/readskills}">Skills</a>
+    <a sec:authorize="hasAuthority('RECRUITER')" class="nav-link" th:href="@{/company/readcompanies}">Companies</a>
+    <a sec:authorize="hasAuthority('RECRUITER')" class="nav-link" th:href="@{/job/readjobs}">Manage Jobs</a>
+    <a sec:authorize="hasAuthority('RECRUITER')" class="nav-link" th:href="@{/application/readallapplications}">Applications</a>
+    <a sec:authorize="hasAuthority('JOBSEEKER')" class="nav-link" th:href="@{/job/readjobsactive}">Search Jobs</a>
+    <a sec:authorize="hasAuthority('JOBSEEKER')" class="nav-link" th:href="@{/application/readapplicationsuser}">Applied Jobs</a>
+    <a th:href="@{/user/edit}" class="nav-link" >Account Settings</a>
+    <a href="/logout" class="nav-link">Logout</a>
+</div>
+
+<div class="container">
+    <h1>Create Skill</h1>
+    <form th:action="@{/skill/createskills}" method="post">
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" size="10" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description" size="50" required>
+        </div>
+        <div class="form-group1">
+            <button type="submit">Create Skill</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

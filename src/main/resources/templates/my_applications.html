@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Job Applications</title>
+    <style>
+
+        body {
+            background-image: url('/images/welcome_login_signup.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .nav-container {
+            width: 100%;
+            background-color: #007bff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 20px;
+            text-align: center;
+            background-color: rgb(246, 246, 246);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #343a40;
+        }
+
+        .tile {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin: 20px;
+            padding: 20px;
+            text-align: left;
+            width: calc(33.333% - 40px);
+            box-sizing: border-box;
+            display: inline-block;
+            vertical-align: top;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .tile:hover {
+            background-color: #f0f8ff;
+            transform: scale(1.02);
+        }
+
+        .tile h2 {
+            margin-top: 0;
+            color: #007bff;
+        }
+
+        .tile p {
+            margin: 5px 0;
+        }
+
+        .tile ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tile ul li {
+            margin: 5px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: start;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-red {
+            background-color: #81bdb8;
+            color: #070707;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .btn-grey{
+            background-color: rgb(80, 79, 79);
+            color: #f6f6f6;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .btn-match1 {
+            background-color: #cbc49a;
+            color: #070707;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .btn-match2 {
+            background-color: #c9c096;
+            color: #070707;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .search-container {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            margin-right: 10px;
+            flex: 1;
+        }
+
+        .search-select {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .search-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .search-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script type="text/javascript">
+        function submitForm(application_id) {
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/application/viewapplication';
+            var hiddenField = document.createElement('input');
+            hiddenField.type = 'hidden';
+            hiddenField.name = 'application_id';
+            hiddenField.value = application_id;
+            form.appendChild(hiddenField);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+</head>
+<body>
+<div class="nav-container">
+    <a href="/" class="nav-link" style="font-weight: bold;">
+        JobHive
+        <img src="/images/jobhive.jpeg" alt="animated" style="width: 20px; height: 20px;">
+    </a>
+    <a sec:authorize="hasAuthority('RECRUITER')" class="nav-link" th:href="@{/skill/readskills}">Skills</a>
+    <a sec:authorize="hasAuthority('RECRUITER')" class="nav-link" th:href="@{/company/readcompanies}">Companies</a>
+    <a sec:authorize="hasAuthority('RECRUITER')" class="nav-link" th:href="@{/job/readjobs}">Manage Jobs</a>
+    <a sec:authorize="hasAuthority('RECRUITER')" class="nav-link" th:href="@{/application/readallapplications}">Applications</a>
+    <a sec:authorize="hasAuthority('JOBSEEKER')" class="nav-link" th:href="@{/job/readjobsactive}">Search Jobs</a>
+    <a sec:authorize="hasAuthority('JOBSEEKER')" class="nav-link" th:href="@{/application/readapplicationsuser}">Applied Jobs</a>
+    <a th:href="@{/user/edit}" class="nav-link">Account Settings</a>
+    <a href="/logout" class="nav-link">Logout</a>
+</div>
+
+<div class="container">
+    <h1>JOB APPLICATIONS</h1>
+
+    <div th:each="app : ${appList}" class="tile" th:onclick="'submitForm(' + ${app.application_id} + ')'">
+        <h2 th:text="${app.job.job_title}"></h2>
+        <p><strong>Job Type:</strong> <span th:text="${app.job.job_type}"></span></p>
+        <p><strong>Company Name:</strong> <span th:text="${app.company.company_name}"></span></p>
+        <p><strong>Applicant Email:</strong> <span th:text="${app.user.email}"></span></p>
+        <p><strong>Applied Date:</strong>
+            <span th:text="${#dates.format(app.application_date, 'MMMM dd, yyyy')}">
+            </span>
+        </p>
+        <p th:if="${app.lastSeen != null}">
+            <strong>Last seen:</strong>
+            <span th:text="${#dates.format(app.lastSeen, 'MMMM dd, yyyy hh:mm a')}"></span>
+        </p>
+        <p><strong>Required Skills for Job:</strong></p>
+        <span th:each ="skill: ${app.jobSkills}">
+            <button type="button" class="skill-button btn-red" th:text="${skill.skill_title}"></button>
+        </span>
+        <p><strong>Your Skills:</strong></p>
+        <span th:each ="skill: ${app.userSkills}">
+            <button type="button" class="skill-button btn-match2" th:text="${skill.skill_title}"></button>
+        </span>
+
+        <p><strong>Application Status:</strong></p>
+        <span>
+            <button type="button" class="skill-button btn-grey" th:text="${app.status}"></button>
+        </span>
+
+        <p><strong>Last viewed:</strong></p>
+        <span th:if="${app.lastSeen != null}">
+            <button type="button" class="skill-button btn-grey" th:text="${#dates.format(app.lastSeen, 'MMMM dd, yyyy hh:mm a')}"></button>
+        </span>
+        <span th:if="${app.lastSeen == null}">
+            <button type="button" class="skill-button btn-grey" th:text="'Not yet seen by recruiters'"></button>
+        </span>
+
+
+    </div>
+
+</div>
+</body>
+</html>

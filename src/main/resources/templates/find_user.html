@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel = "stylesheet" href="/styles/recruiter_login.css">
+  <title>JobHive Forgot Password</title>
+</head>
+<body>
+<div class="container">
+  <form th:action="@{/user/forgotpassword}"  method="post">
+    <h1>Forgot Password</h1>
+    <input type="text" placeholder="Enter user name or email" id= "username" name = "searchterm" required>
+    <button type = "submit" id="login">Find User</button>
+
+    <div th:if="${errorMessage}" class="alert alert-error">
+      <p th:text="${errorMessage}" style="color:red;"></p>
+    </div>
+
+
+    <div th:if="${success}" class="alert alert-error">
+      <p th:text="${success}" style="color:green;"></p>
+    </div>
+
+  </form>
+  <br>
+  <br>
+  <div class="links">
+    <a href="/login">Log In</a>
+    <a href="/user/register">Sign Up</a>
+  </div>
+</div>
+</body>
+</html>

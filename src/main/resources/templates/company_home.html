@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="UTF-8">
+<head>
+    <title>Company List</title>
+    <script type="text/javascript">
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete?');
+        }
+    </script>
+    <style>
+
+
+        body {
+            background-image: url('/images/welcome_login_signup.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .nav-container {
+            width: 100%;
+            background-color: #007bff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #343a40;
+        }
+        .tile {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin: 20px;
+            padding: 20px;
+            text-align: left;
+            width: calc(33.333% - 40px);
+            box-sizing: border-box;
+            display: inline-block;
+            vertical-align: top;
+        }
+        .tile h2 {
+            margin-top: 0;
+            color: #007bff;
+        }
+        .tile p {
+            margin: 5px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        .btn-container {
+            display: flex;
+            justify-content: start;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .pagination {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .pagination a {
+            color: #007bff;
+            padding: 10px 15px;
+            text-decoration: none;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .pagination a:hover {
+            background-color: #f1f1f1;
+        }
+        .pagination .active {
+            background-color: #007bff;
+            color: white;
+            border: 1px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+<div class="nav-container">
+    <a href="/" class="nav-link" style="font-weight: bold;">
+        JobHive
+        <img src="/images/jobhive.jpeg" alt="animated" style="width: 20px; height: 20px;">
+    </a>
+    <a sec:authorize="hasAuthority('RECRUITER')" class="nav-link" th:href="@{/skill/readskills}">Skills</a>
+    <a sec:authorize="hasAuthority('RECRUITER')" class="nav-link" th:href="@{/company/readcompanies}">Companies</a>
+    <a sec:authorize="hasAuthority('RECRUITER')" class="nav-link" th:href="@{/job/readjobs}">Manage Jobs</a>
+    <a sec:authorize="hasAuthority('RECRUITER')" class="nav-link" th:href="@{/application/readallapplications}">Applications</a>
+    <a sec:authorize="hasAuthority('JOBSEEKER')" class="nav-link" th:href="@{/job/readjobsactive}">Search Jobs</a>
+    <a sec:authorize="hasAuthority('JOBSEEKER')" class="nav-link" th:href="@{/application/readapplicationsuser}">Applied Jobs</a>
+    <a th:href="@{/user/edit}" class="nav-link" >Account Settings</a>
+    <a href="/logout" class="nav-link">Logout</a>
+</div>
+<div class="container">
+    <h1>Company List</h1>
+    <div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></div>
+    <div class="buttonContainer">
+        <form th:action="@{createcompanies}" method="get">
+            <input type="submit" value="Create Company" class="btn">
+        </form>
+    </div>
+    <div th:each="companyObj : ${companies}" class="tile">
+        <h2 th:text="${companyObj.company_name}"></h2>
+        <p><strong>Description:</strong> <span th:text="${companyObj.company_description}"></span></p>
+        <p><strong>State:</strong> <span th:text="${companyObj.company_state}"></span></p>
+        <p><strong>City:</strong> <span th:text="${companyObj.company_city}"></span></p>
+        <p><strong>Address:</strong> <span th:text="${companyObj.company_address}"></span></p>
+        <p><strong>Contact:</strong> <span th:text="${companyObj.company_contact}"></span></p>
+        <div class="btn-container">
+            <form action="#" th:action="@{updateCompany/{id}(id=${companyObj.getCompany_Id()})}">
+                <input type="submit" value="Update" class="btn">
+            </form>
+            <form th:action="@{deleteCompany/{id}(id=${companyObj.getCompany_Id()})}" method='post'>
+                <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirmDelete()">
+            </form>
+        </div>
+    </div>
+    <div class="pagination">
+        <a th:if="${currentPage > 0}" th:href="@{/company/readcompanies(page=${currentPage - 1}, size=${6})}">&laquo;</a>
+        <a th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+           th:classappend="${currentPage == i} ? 'active'"
+           th:href="@{/company/readcompanies(page=${i}, size=${6})}"
+           th:text="${i + 1}"></a>
+        <a th:if="${currentPage < totalPages - 1}" th:href="@{/readcompanies(page=${currentPage + 1}, size=${6})}">&raquo;</a>
+    </div>
+</div>
+</body>
+</html>

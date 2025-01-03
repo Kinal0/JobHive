@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <title>Job List</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <style>
+    body {
+      background-image: url('/images/welcome_login_signup.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-container {
+      width: 100%;
+      background-color: #007bff;
+      padding: 10px 0;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+    }
+    .nav-link {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 18px;
+    }
+    .nav-link:hover {
+      text-decoration: underline;
+    }
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 20px auto;
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .tile {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin: 20px 0;
+      padding: 20px;
+      text-align: left;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .btn-red {
+      background-color: #81bdb8;
+      color: #070707;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      margin: 5px 5px 5px 0;
+    }
+    .btn-red:hover {
+      background-color: #6aa9a1;
+    }
+    .btn-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .skill-container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    h1, h3 {
+      color: #343a40;
+    }
+    h1 {
+      font-size: 36px;
+    }
+    h3 {
+      font-size: 24px;
+    }
+  </style>
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.nav-link').hover(
+              function() {
+                $(this).css('text-decoration', 'underline');
+              },
+              function() {
+                $(this).css('text-decoration', 'none');
+              }
+      );
+    });
+  </script>
+</head>
+<body>
+<div class="nav-container">
+  <a href="/" class="nav-link font-weight-bold">
+    JobHive
+    <img src="/images/jobhive.jpeg" alt="animated" style="width: 20px; height: 20px;">
+  </a>
+  <a sec:authorize="hasAuthority('RECRUITER')" class="nav-link" th:href="@{/skill/readskills}">Skills</a>
+  <a sec:authorize="hasAuthority('RECRUITER')" class="nav-link" th:href="@{/company/readcompanies}">Companies</a>
+  <a sec:authorize="hasAuthority('RECRUITER')" class="nav-link" th:href="@{/job/readjobs}">Manage Jobs</a>
+  <a sec:authorize="hasAuthority('RECRUITER')" class="nav-link" th:href="@{/application/readallapplications}">Applications</a>
+  <a sec:authorize="hasAuthority('JOBSEEKER')" class="nav-link" th:href="@{/job/readjobsactive}">Search Jobs</a>
+  <a sec:authorize="hasAuthority('JOBSEEKER')" class="nav-link" th:href="@{/application/readapplicationsuser}">Applied Jobs</a>
+  <a th:href="@{/user/edit}" class="nav-link">Account Settings</a>
+  <a href="/logout" class="nav-link">Logout</a>
+</div>
+
+<div class="container">
+  <h1>Application Overview</h1>
+  <div class="tile">
+    <h3>Job Details</h3>
+    <p><strong>Job Title:</strong> <span th:text="${app.job.job_title}"></span></p>
+    <p><strong>Job Description:</strong> <span th:text="${app.job.job_description}"></span></p>
+    <p ><strong>Job Type:</strong> <span th:text="${app.job.job_type}"></span></p>
+    <p th:if="${app.job.job_type != 'Remote'}"><strong>Job Location:</strong> <span th:text="${app.job.job_city} + ', ' + ${app.job.job_state}"></span></p>
+  </div>
+
+  <div class="tile">
+    <h3>Applicant Details</h3>
+    <p><strong>First Name:</strong> <span th:text="${app.user.first_name}"></span></p>
+    <p><strong>Last Name:</strong> <span th:text="${app.user.last_name}"></span></p>
+    <p><strong>Email:</strong> <span th:text="${app.user.email}"></span></p>
+  </div>
+
+  <div class="tile">
+    <h3>Company Details</h3>
+    <p><strong>Company Name:</strong> <span th:text="${app.company.company_name}"></span></p>
+    <p><strong>Company Address:</strong> <span th:text="${app.company.company_address} + ', ' + ${app.company.company_city} + ', ' + ${app.company.company_state}"></span></p>
+    <p><strong>Company Contact:</strong> <span th:text="${app.company.company_contact}"></span></p>
+  </div>
+
+  <div class="tile">
+    <h3>Skill Details</h3>
+    <p><strong>Required Skills for the Job:</strong></p>
+    <div class="skill-container">
+            <span th:each="skill: ${app.jobskill}">
+                <button type="button" class="skill-button btn-red" th:text="${skill.skill_title}"></button>
+            </span>
+    </div>
+    <p><strong>Applicant Skills</strong></p>
+    <div class="skill-container">
+            <span th:each="skill: ${app.userskill}">
+                <button type="button" class="skill-button btn-red" th:text="${skill.skill_title}"></button>
+            </span>
+    </div>
+    <form th:action="@{/user/edit}" method="get" class="ml-2">
+      <button type="submit" class="btn btn-danger">Edit Applicant Skills</button>
+    </form>
+  </div>
+
+  <form th:action="@{/application/saveapplication}" th:object="${app}" th:method="post">
+
+    <input type="hidden" th:field="*{job}">
+    <input type="hidden" th:field="*{user}">
+    <input type="hidden" th:field="*{appliedDate}">
+    <input type="hidden" th:field="*{comments}">
+    <input type="hidden" th:field="*{lastUpdated}">
+    <input type="hidden" th:field="*{status}">
+    <input type="hidden" th:field="*{allSkills}">
+    <input type="hidden" th:field="*{userskill}">
+    <input type="hidden" th:field="*{jobskill}">
+    <input type="hidden" th:field="*{userSkills}">
+    <input type="hidden" th:field="*{jobSkills}">
+    <input type="hidden" th:field="*{company}">
+    <div class="btn-container">
+      <input type="submit" value="Send Application" class="btn btn-primary">
+    </div>
+  </form>
+
+</div>
+
+
+</body>
+</html>
